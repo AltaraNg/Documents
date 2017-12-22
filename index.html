@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Altara Credit Customer Approval</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/lumen/bootstrap.min.css">
+    <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"> -->
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+
+</head>
+
+<body>
+    <div id="root">
+        <div class="container">
+
+            <header style="width:100%;background-color:#EEEEEE;;color:#00264d ;height:200px">
+                <div>
+                    <img src="altara_logo.png" alt="" style="width:213px; height:80px;">
+                    <h1 style="color: #00264d ; text-align:center"> Document Aknowlegment Portal</h1>
+                </div>
+
+            </header>
+            <div class="panel panel-primary">
+                <div class="panel-heading" style="background-color: #00264d;">Altara Credit Documents</div>
+                <div class="panel-body">
+                    <div class="loading" v-if='dataloaded'>Loading&#8230;</div>
+                    <p class="alert alert-danger alert-dismissable" v-if='errorMessage'>
+                            <a href="#" class="close" v-on:click="resetMessage" data-dismiss="alert" aria-label="close">&times;</a> {{errorMessage}}
+                        </p>
+                        <p class="alert alert-success alert-dismissable" v-if='successMessage'>
+                            <a href="#" class="close" v-on:click="resetMessage" data-dismiss="alert" aria-label="close">&times;</a> {{successMessage}}
+                        </p>
+                </div>
+                <div v-if="!access_granted">
+                    <div class="row" style="padding:40px;">
+                        <div class="col-sm-6 form-group">
+                            <label>Document Verification Agent ID</label>
+                            <input type="text" placeholder="Enter DVA ID.." v-model="Employee_id" class="form-control">
+
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <label>Access Code</label>
+                            <input type="text" placeholder="Enter Access code Here.." v-model="Access_code" class="form-control">
+
+                        </div>
+
+                    </div>
+
+                    <button type="button" @click="GainAccess()" class="btn btn-success btn-small" style="display:block; font-size:12px;margin:0 auto;">Check Customer</button>
+                </div>
+
+                <div v-if="access_granted && idchecked" class="" style="padding:30px;;width:90%;margin:0 auto; margin-top:20px;background-color:#EEEEEE">
+                    <label>Customer ID</label>
+                    <input type="text" placeholder="Enter Customer ID Here.." v-model="Customer_id" class="form-control">
+                   <br>
+                    <button type="button" @click="CheckId()" class="btn btn-success btn-small" style="display:block; font-size:12px;margin:0 auto;">Approve Customer</button>
+                <br>
+                </div>
+
+                <div v-if="!idchecked">
+                <div class="row">  
+                <!-- <div class="col-sm-6">
+                    <label class="btn btn-primary"> Proof Of ID 
+                        <input type="button"  @click="Aknowlege(check_bs,proofid)" v-if="check_id == 0" :disabled="check_id == 0"  autocomplete="off">
+                        <span v-if="check_id == 1" class="glyphicon glyphicon-ok"></span>
+                    </label>			
+                </div> -->
+
+                <div class="col-sm-4">
+                        <button  type="button"  @click="Aknowlege(check_bs,proofid)" :disabled="check_id == 1" class="btn btn-primary">
+                                <span v-if="check_id == 1" class="glyphicon glyphicon-ok">Aprroved</span> Proof Of ID 
+                              </button>
+                 
+            </div>
+
+            <div class="col-sm-4">
+                    <button  type="button" @click="Aknowlege(check_bs,passportp)"  :disabled="check_pp == 1"class="btn btn-primary">
+                            <span v-if="check_pp == 1" class="glyphicon glyphicon-ok">Aprroved</span> 2 Passport Photo
+                          </button>
+             
+        </div>
+
+              
+                </div>
+                <br>
+                <div class="row" > 
+                <div class="col-sm-4">
+                    <label class="btn btn-primary"> Utility Bill
+                        <input type="checkbox"  @click="Aknowlege(check_ut,utility)" v-if="check_ut == 0" :disabled="check_ut == 0" autocomplete="off">
+                        <span v-if="check_ut == 1" class="glyphicon glyphicon-ok"></span>
+                    </label>
+                </div>
+                <div class="col-sm-4">
+                    <label class="btn btn-success"> Bank Statement
+                        <input type="checkbox"  @click="Aknowlege(check_bs,banks)" v-if="check_bs == 0" :disabled="check_bs == 0" autocomplete="off">
+                        <span v-if="check_bs == 1" class="glyphicon glyphicon-ok"></span>
+                    </label>
+                </div>
+                <div class="col-sm-4">
+                        <button class="btn btn-success" type="checkbox"   @click="Aknowlege(check_gc,guachk)" v-if="check_gc == 0" :disabled="check_gc == 0" >Guarantor's Cheque
+              <span v-if="check_gc == 1" class="glyphicon glyphicon-ok"></span>
+                        </button>
+                     
+                </div>
+                </div>
+                </div>
+                </div>
+
+
+
+                <div id="myModal" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+        
+                                <div class="panel-heading" style="background-color: #00264d;">
+                                    <h4 class="modal-title" style="color:white">Altara Credit Customer Registration</h4>
+                                </div>
+        
+                                <div class="panel-body">
+
+                                </div>
+                            </div>
+                        </div>
+                </div>
+
+                
+            </div>
+        </div>
+
+    </div>
+
+    <script type="text/javascript" src="axios.js">
+    </script>
+    <!-- <script type="text/javascript" src="download.js">
+    </script> -->
+    <script type="text/javascript" src="https://unpkg.com/vue@2.5.2">
+    </script>
+    <script type="text/javascript" src="app.js">
+    </script>
+
+</body>
+
+</html>
