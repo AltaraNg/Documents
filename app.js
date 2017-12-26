@@ -7,21 +7,22 @@ var app = new Vue({
         Access_code: '',
         dataloaded: false,
         access_granted: false,
-        Customer_id:'',
-        check_ut:0,
-        check_id:0,
-        check_bs:0,
-        check_pp:0,
-        checKiD:[],
-        check_gc:0,
-        CustName:'',
-        proofid:'proofofid',
-        guachk:'guarantorcheque',
-        passportp:'passportphoto',
-utility:'utilitybill',
-banks:'bankstatement',
-idchecked:true
-        
+        Customer_id: '',
+        check_ut: 0,
+        check_id: 0,
+        check_bs: 0,
+        check_pp: 0,
+        checKiD: [],
+        check_gc: 0,
+        CustName: '',
+        proofid: 'proofofid',
+        guachk: 'guarantorcheque',
+        passportp: 'passportphoto',
+        utility: 'utilitybill',
+        banks: 'bankstatement',
+        idchecked: true,
+        selected_doc: null
+
 
 
     },
@@ -61,198 +62,208 @@ idchecked:true
 
                         setTimeout(function() {
                             app.errorMessage = '';
-                        }, 1000);
+                        }, 2000);
 
                     } else {
                         if (response.data.data.length != 0) {
                             app.access_granted = true;
                             app.successMessage = "Access Granted!, Enter Customer ID below";
-                            
-                                                    setTimeout(function() {
-                                                        app.successMessage = '';
-                                                    }, 1000);
-                        }
-                        else{
+
+                            setTimeout(function() {
+                                app.successMessage = '';
+                            }, 2000);
+                        } else {
                             app.errorMessage = "Access Denied, Wrong Login Details";
-                            
-                                                    setTimeout(function() {
-                                                        app.errorMessage = '';
-                                                    }, 2000);
+
+                            setTimeout(function() {
+                                app.errorMessage = '';
+                            }, 2000);
                         }
                     }
                 });
         },
 
+        ModalComfirm: function(doc_type) {
+            app.selected_doc = doc_type;
+        },
 
-        Aknowlege: function(value, doc_type) {
-           if (doc_type == 'proofofid'){
-            axios.post("https://wafcolapi.herokuapp.com/api.php?action=document", {
-                Customer_id: app.Customer_id,
-                check_id: 1
-               
-            })
-            .then(function(response) {
-                console.log(response);
-                if (response.data.error) {
-                    app.submitted = false;
-                    app.errorMessage = response.data.message;
-                    setTimeout(function() {
-                        app.errorMessage = '';
-                    }, 1000);
-                } else {
-                    app.submitted = false;
-                    
-                    app.successMessage = response.data.message;
-                    // app.sendNotification(name, telnumber)
-                    setTimeout(function() {
-                        app.successMessage = '';
-                    }, 1000);
+        Acknowledge: function(doc_type) {
+            if (doc_type == 'proofofid') {
+                axios.post("https://wafcolapi.herokuapp.com/api.php?action=document", {
+                        Customer_id: app.Customer_id,
+                        check_id: 1
 
-                }
-            });
-           }
-           if (doc_type == 'guarantorcheque'){
-            axios.post("https://wafcolapi.herokuapp.com/api.php?action=document", {
-                Customer_id: app.Customer_id,
-                check_gc: 1
-            })
-            .then(function(response) {
-                console.log(response);
-                if (response.data.error) {
-                    app.submitted = false;
-                    app.errorMessage = response.data.message;
-                    setTimeout(function() {
-                        app.errorMessage = '';
-                    }, 1000);
-                } else {
-                    app.submitted = false;
-                    
-                    app.successMessage = response.data.message;
-                    // app.sendNotification(name, telnumber)
-                    setTimeout(function() {
-                        app.successMessage = '';
-                    }, 1000);
+                    })
+                    .then(function(response) {
+                        console.log(response);
+                        if (response.data.error) {
+                            app.submitted = false;
+                            app.errorMessage = response.data.message;
+                            setTimeout(function() {
+                                app.errorMessage = '';
+                            }, 2000);
+                        } else {
+                            app.submitted = false;
 
-                }
-            });
-           }
+                            app.successMessage = response.data.message;
+                            app.CheckDoc(app.Customer_id);
+                            // app.sendNotification(name, telnumber)
+                            setTimeout(function() {
+                                app.successMessage = '';
+                            }, 2000);
+                            app.selected_doc = null;
+                        }
+                    });
+            }
+            if (doc_type == 'guarantorcheque') {
+                axios.post("https://wafcolapi.herokuapp.com/api.php?action=document", {
+                        Customer_id: app.Customer_id,
+                        check_gc: 1
+                    })
+                    .then(function(response) {
+                        console.log(response);
+                        if (response.data.error) {
+                            app.submitted = false;
+                            app.errorMessage = response.data.message;
+                            setTimeout(function() {
+                                app.errorMessage = '';
+                            }, 2000);
+                        } else {
+                            app.submitted = false;
 
-           if (doc_type == 'passportphoto'){
-            axios.post("https://wafcolapi.herokuapp.com/api.php?action=document", {
-                Customer_id: app.Customer_id,
-                check_pp: 1
-            })
-            .then(function(response) {
-                console.log(response);
-                if (response.data.error) {
-                    app.submitted = false;
-                    app.errorMessage = response.data.message;
-                    setTimeout(function() {
-                        app.errorMessage = '';
-                    }, 1000);
-                } else {
-                    app.submitted = false;
-                    
-                    app.successMessage = response.data.message;
-                    // app.sendNotification(name, telnumber)
-                    setTimeout(function() {
-                        app.successMessage = '';
-                    }, 1000);
+                            app.successMessage = response.data.message;
+                            app.CheckDoc(app.Customer_id);
+                            // app.sendNotification(name, telnumber)
+                            setTimeout(function() {
+                                app.successMessage = '';
+                            }, 2000);
+                            app.selected_doc = null;
+                        }
+                    });
+            }
 
-                }
-            });
-           }
+            if (doc_type == 'passportphoto') {
+                axios.post("https://wafcolapi.herokuapp.com/api.php?action=document", {
+                        Customer_id: app.Customer_id,
+                        check_pp: 1
+                    })
+                    .then(function(response) {
+                        console.log(response);
+                        if (response.data.error) {
+                            app.submitted = false;
+                            app.errorMessage = response.data.message;
+                            setTimeout(function() {
+                                app.errorMessage = '';
+                            }, 2000);
+                        } else {
+                            app.submitted = false;
 
-           if (doc_type == 'utilitybill'){
-            axios.post("https://wafcolapi.herokuapp.com/api.php?action=document", {
-                Customer_id: app.Customer_id,
-                check_ut: 1
-            })
-            .then(function(response) {
-                console.log(response);
-                if (response.data.error) {
-                    app.submitted = false;
-                    app.errorMessage = response.data.message;
-                    setTimeout(function() {
-                        app.errorMessage = '';
-                    }, 1000);
-                } else {
-                    app.submitted = false;
-                    
-                    app.successMessage = response.data.message;
-                    // app.sendNotification(name, telnumber)
-                    setTimeout(function() {
-                        app.successMessage = '';
-                    }, 1000);
+                            app.successMessage = response.data.message;
+                            app.CheckDoc(app.Customer_id);
+                            // app.sendNotification(name, telnumber)
+                            setTimeout(function() {
+                                app.successMessage = '';
+                            }, 2000);
+                            app.selected_doc = null;
+                        }
+                    });
+            }
 
-                }
-            });
-           }
+            if (doc_type == 'utilitybill') {
+                axios.post("https://wafcolapi.herokuapp.com/api.php?action=document", {
+                        Customer_id: app.Customer_id,
+                        check_ut: 1
+                    })
+                    .then(function(response) {
+                        console.log(response);
+                        if (response.data.error) {
+                            app.submitted = false;
+                            app.errorMessage = response.data.message;
+                            setTimeout(function() {
+                                app.errorMessage = '';
+                            }, 2000);
+                        } else {
+                            app.submitted = false;
 
-           if (doc_type == 'bankstatement'){
-            axios.post("https://wafcolapi.herokuapp.com/api.php?action=document", {
-                Customer_id: app.Customer_id,
-                check_bs: 1
+                            app.successMessage = response.data.message;
+                            app.CheckDoc(app.Customer_id);
+                            // app.sendNotification(name, telnumber)
+                            setTimeout(function() {
+                                app.successMessage = '';
+                            }, 2000);
+                            app.selected_doc = null;
+                        }
+                    });
+            }
 
-            })
-            .then(function(response) {
-                console.log(response);
-                if (response.data.error) {
-                    app.submitted = false;
-                    app.errorMessage = response.data.message;
-                    setTimeout(function() {
-                        app.errorMessage = '';
-                    }, 1000);
-                } else {
-                    app.submitted = false;
-                    
-                    app.successMessage = response.data.message;
-                    // app.sendNotification(name, telnumber)
-                    setTimeout(function() {
-                        app.successMessage = '';
-                    }, 1000);
+            if (doc_type == 'bankstatement') {
+                axios.post("https://wafcolapi.herokuapp.com/api.php?action=document", {
+                        Customer_id: app.Customer_id,
+                        check_bs: 1
 
-                }
-            });
-           }
- 
+                    })
+                    .then(function(response) {
+                        console.log(response);
+                        if (response.data.error) {
+                            app.submitted = false;
+                            app.errorMessage = response.data.message;
+                            setTimeout(function() {
+                                app.errorMessage = '';
+                            }, 2000);
+                        } else {
+                            app.submitted = false;
+
+                            app.successMessage = response.data.message;
+                            app.CheckDoc(app.Customer_id);
+                            // app.sendNotification(name, telnumber)
+                            setTimeout(function() {
+                                app.successMessage = '';
+                            }, 2000);
+                            app.selected_doc = null;
+                        }
+                    });
+            }
+
         },
 
 
         CheckDoc: function(customer) {
             console.log(customer)
-                axios.post("https://wafcolapi.herokuapp.com/api.php?action=checkDoc", {
-                        Customer_id: customer,
-                    })
-                    .then(function(response) {
-                        console.log(response);
-                        if (response.data.error) {
-                            app.errorMessage = response.data.message;
-                            setTimeout(function() {
-                                app.errorMessage = '';
-                            }, 1000);
-                        } else {
-                            app.idchecked = false;
-                            if ( response.data.checklist.length != 0){
+            axios.post("https://wafcolapi.herokuapp.com/api.php?action=checkDoc", {
+                    Customer_id: customer,
+                })
+                .then(function(response) {
+                    console.log(response);
+                    if (response.data.error) {
+                        app.errorMessage = response.data.message;
+                        setTimeout(function() {
+                            app.errorMessage = '';
+                        }, 2000);
+                    } else {
+                        app.idchecked = false;
+                        if (response.data.checklist.length != 0) {
 
-                                app.check_ut= response.data.checklist[0].utility;
-                                app.check_id= response.data.checklist[0].id_proof;
-                                app.check_bs= response.data.checklist[0].banks;
-                                app.check_pp= response.data.checklist[0].passport;
-                                app.check_gc= response.data.checklist[0].gcheque;
-                                console.log(app.check_bs + app.check_gc + app.check_id + app.check_pp + app.check_ut)
-                            }
-                            else{
-                            }
-                            app.successMessage = response.data.message;
-                            // app.sendNotification(name, telnumber)
-                            setTimeout(function() {
-                                app.successMessage = '';
-                            }, 1000);
+                            app.check_ut = response.data.checklist[0].utility;
+                            app.check_id = response.data.checklist[0].id_proof;
+                            app.check_bs = response.data.checklist[0].banks;
+                            app.check_pp = response.data.checklist[0].passport;
+                            app.check_gc = response.data.checklist[0].gcheque;
+                            console.log(app.check_bs + app.check_gc + app.check_id + app.check_pp + app.check_ut)
+
+                            app.dataloaded = false;
+                        } else {
+
 
                         }
-                    });
-           
+                        app.successMessage = response.data.message;
+                        // app.sendNotification(name, telnumber)
+                        setTimeout(function() {
+                            app.successMessage = '';
+                        }, 2000);
+
+                    }
+                });
+
         },
 
         CheckId: function() {
@@ -262,28 +273,30 @@ idchecked:true
                 })
                 .then(function(response) {
                     console.log(response);
-                    app.dataloaded = false;
+
                     if (response.data.error) {
                         app.errorMessage = response.data.message;
-
+                        app.dataloaded = false;
                         setTimeout(function() {
                             app.errorMessage = '';
-                        }, 1000);
+                        }, 2000);
 
                     } else {
-                       ;
                         if (response.data.checklist.length != 0) {
+                            app.dataloaded = false;
                             app.CheckDoc(app.Customer_id);
                             app.CustName = response.data.checklist[0].first_name + " " + response.data.checklist[0].last_name
+
                             app.successMessage = "Click to Acknowlege Customer ";
-                            
-                                                    setTimeout(function() {
-                                                        app.successMessage = '';
-                                                    }, 1000);
-                        }
-
-                        else{
-
+                            setTimeout(function() {
+                                app.successMessage = '';
+                            }, 2000);
+                        } else {
+                            // app.dataloaded = true;
+                            // app.successMessage = "Click to Acknowlege Customer ";
+                            // setTimeout(function() {
+                            //     app.successMessage = '';
+                            // }, 2000);
                         }
                         // app.ApproveCustomer(app.CustName, app.phoneNo);
                         // app.Customer_id = "";

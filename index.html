@@ -7,6 +7,7 @@
     <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"> -->
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css" />
 
@@ -19,7 +20,7 @@
             <header style="width:100%;background-color:#EEEEEE;;color:#00264d ;height:200px">
                 <div>
                     <img src="altara_logo.png" alt="" style="width:213px; height:80px;">
-                    <h1 style="color: #00264d ; text-align:center"> Document Aknowlegment Portal</h1>
+                    <h1 style="color: #00264d ; text-align:center"> Document Acknowledgment Portal</h1>
                 </div>
 
             </header>
@@ -28,14 +29,14 @@
                 <div class="panel-body">
                     <div class="loading" v-if='dataloaded'>Loading&#8230;</div>
                     <p class="alert alert-danger alert-dismissable" v-if='errorMessage'>
-                        <a href="#" class="close" v-on:click="resetMessage" data-dismiss="alert" aria-label="close">&times;</a>                        {{errorMessage}}
+                        <a href="#" class="close" v-on:click="resetMessage" data-dismiss="alert" aria-label="close">&times;</a> {{errorMessage}}
                     </p>
                     <p class="alert alert-success alert-dismissable" v-if='successMessage'>
-                        <a href="#" class="close" v-on:click="resetMessage" data-dismiss="alert" aria-label="close">&times;</a>                        {{successMessage}}
+                        <a href="#" class="close" v-on:click="resetMessage" data-dismiss="alert" aria-label="close">&times;</a> {{successMessage}}
                     </p>
                 </div>
                 <div v-if="!access_granted">
-                    <div class="row" style="padding:40px;">
+                    <div class="row " style="padding:40px;">
                         <div class="col-sm-6 form-group">
                             <label>Document Verification Agent ID</label>
                             <input type="text" placeholder="Enter DVA ID.." v-model="Employee_id" class="form-control">
@@ -61,63 +62,53 @@
                 </div>
 
                 <div v-if="!idchecked">
-                    <div class="row">
-                        <!-- <div class="col-sm-6">
-                    <label class="btn btn-primary"> Proof Of ID 
-                        <input type="button"  @click="Aknowlege(check_bs,proofid)" v-if="check_id == 0" :disabled="check_id == 0"  autocomplete="off">
-                        <span v-if="check_id == 1" class="glyphicon glyphicon-ok"></span>
-                    </label>			
-                </div> -->
+                    <table class=" table table-bordered list">
+                        <tr>
+                            <th>Proof Of ID </th>
+                            <th>2 Passport Photo</th>
+                            <th>Utility Bill</th>
+                            <th>Bank Statement</th>
+                            <th>Guranrors Cheque</th>
 
-                        <div class="col-sm-4">
-                            <button type="button" @click="Aknowlege(check_bs,proofid)" :disabled="check_id == 1" class="btn btn-primary">
-                                <span v-if="check_id == 1" class="glyphicon glyphicon-ok">Aprroved</span> Proof Of ID 
+                        </tr>
+                        <tr>
+                            <td> <button type="button" data-toggle="modal" data-target="#myModal" @click="ModalComfirm(proofid)" v-bind:class="{ 'btn-danger': check_id == 0 }" :disabled="check_id == 1" class="btn btn-small btn-primary">
+                                        <span v-if="check_id == 1" class="glyphicon glyphicon-ok">Aprroved</span> 
+                                        <span v-if="check_id == 0" class="glyphicon glyphicon-error">Not Approved</span> 
+                                      </button>
+                            </td>
+                            <td> <button type="button" data-toggle="modal" data-target="#myModal" @click="ModalComfirm(passportp)" v-bind:class="{ 'btn-danger': check_pp == 0 }" :disabled="check_pp == 1" class="btn btn-small btn-primary">
+                                        <span v-if="check_pp == 1" class="glyphicon glyphicon-ok">Aprroved</span> 
+                                        <span v-if="check_pp == 0" class="glyphicon glyphicon-error">Not Aprroved</span>
+                                      </button>
+                            </td>
+                            <td><button type="button" data-toggle="modal" data-target="#myModal" @click="ModalComfirm(utility)" v-bind:class="{ 'btn-danger': check_ut == 0 }" :disabled="check_ut == 1" class="btn btn-small btn-primary">
+                                        <span  v-if="check_ut == 1" class="glyphicon glyphicon-ok">Aprroved</span>
+                                        <span  v-if="check_ut == 0" class="glyphicon glyphicon-error"> Not Aprroved</span>
+                                      </button>
+                            </td>
+                            <td> <button type="button" data-toggle="modal" data-target="#myModal" @click="ModalComfirm(banks)" :disabled="check_bs == 1" v-bind:class="{ 'btn-danger': check_bs == 0 }" class="btn btn-small btn-primary">
+                                        <span   v-if="check_bs == 1" class="glyphicon glyphicon-ok">Aprroved</span>
+                                        <span   v-if="check_bs == 0" class="glyphicon glyphicon-error">Not Aprroved</span>
+                                      </button>
+                            </td>
+                            <td><button type="button" data-toggle="modal" data-target="#myModal" v-bind:class="{ 'btn-danger': check_gc == 0 }" @click="ModalComfirm(guachk)" :disabled="check_gc == 1" class="btn btn-primary">
+                                <span   v-if="check_gc == 1" class="glyphicon glyphicon-ok">Aprroved</span>
+                                <span   v-if="check_gc == 0" class="glyphicon glyphicon-error">Not Aprroved</span>
                               </button>
+                            </td>
 
-                        </div>
-
-                        <div class="col-sm-4">
-                            <button type="button" @click="Aknowlege(check_bs,passportp)" :disabled="check_pp == 1" class="btn btn-primary">
-                            <span v-if="check_pp == 1" class="glyphicon glyphicon-ok">Aprroved</span> 2 Passport Photo
-                          </button>
-
-                        </div>
-
-                        <div class="col-sm-4">
-                            <button type="button" @click="Aknowlege(check_ut,utility)" :disabled="check_ut == 1" class="btn btn-primary">
-                    <span  v-if="check_ut == 1" class="glyphicon glyphicon-ok">Aprroved</span>Utility Bill
-                  </button>
-
-                        </div>
+                        </tr>
+                    </table>
 
 
-                    </div>
-                    <br>
-                    <div class="row">
 
-                        <div class="col-sm-4">
-                            <button type="button" @click="Aknowlege(check_bs,banks)" :disabled="check_bs == 1" class="btn btn-primary">
-                                <span   v-if="check_bs == 1" class="glyphicon glyphicon-ok">Aprroved</span>Bank Statement
-                              </button>
-
-                        </div>
-
-
-                        <div class="col-sm-4">
-                            <button type="button" @click="Aknowlege(check_gc,guachk)" :disabled="check_gc == 1" class="btn btn-primary">
-                        <span   v-if="check_gc == 1" class="glyphicon glyphicon-ok">Aprroved</span>Bank Statement
-                      </button>
-
-                        </div>
-
-
-                    </div>
                 </div>
             </div>
 
 
 
-            <div id="myModal" class="modal fade" role="dialog">
+            <!-- <div id="myModal" class="modal fade" role="dialog">
                 <div class="modal-dialog">
                     <div class="modal-content">
 
@@ -130,7 +121,31 @@
                         </div>
                     </div>
                 </div>
+            </div> -->
+
+
+            <div id="myModal" class="modal fade">
+                <div class="modal-dialog modal-confirm">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="icon-box">
+                                <i class="material-icons">&#xE5CD;</i>
+                            </div>
+                            <h4 class="modal-title">Are you sure?</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Do you really want to Approve this? This process cannot be undone.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" @click="Acknowledge(selected_doc)" data-dismiss="modal" class="btn btn-info">Approve</button>
+                            <button type="button" class="btn btn-delete" data-dismiss="modal">Cancel</button>
+
+                        </div>
+                    </div>
+                </div>
             </div>
+
 
 
         </div>
@@ -139,15 +154,12 @@
     </div>
 
     <script type="text/javascript" src="axios.js">
-
     </script>
     <!-- <script type="text/javascript" src="download.js">
     </script> -->
     <script type="text/javascript" src="https://unpkg.com/vue@2.5.2">
-
     </script>
     <script type="text/javascript" src="app.js">
-
     </script>
 
 </body>
