@@ -250,10 +250,14 @@ var app = new Vue({
                             app.check_gc = response.data.checklist[0].gcheque;
                             console.log(app.check_bs + app.check_gc + app.check_id + app.check_pp + app.check_ut)
 
-                            app.dataloaded = false;
+
                         } else {
-
-
+                            // app.errorMessage = "Customer ID Doest Exist!";
+                            // // app.sendNotification(name, telnumber)
+                            // setTimeout(function() {
+                            //     app.errorsMessage = '';
+                            // }, 2000);
+                            // app.dataloaded = false;
                         }
                         app.successMessage = response.data.message;
                         // app.sendNotification(name, telnumber)
@@ -292,11 +296,12 @@ var app = new Vue({
                                 app.successMessage = '';
                             }, 2000);
                         } else {
-                            // app.dataloaded = true;
-                            // app.successMessage = "Click to Acknowlege Customer ";
-                            // setTimeout(function() {
-                            //     app.successMessage = '';
-                            // }, 2000);
+                            app.errorMessage = "Customer ID Doest Exist!";
+                            // app.sendNotification(name, telnumber)
+                            setTimeout(function() {
+                                app.errorMessage = '';
+                            }, 2000);
+                            app.dataloaded = false;
                         }
                         // app.ApproveCustomer(app.CustName, app.phoneNo);
                         // app.Customer_id = "";
