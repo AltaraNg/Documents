@@ -56,16 +56,16 @@
 
                 <div v-if="access_granted && idchecked && !verify" class="row" style="padding:30px;width:90%;margin:0 auto; margin-top:20px;background-color:#EEEEEE">
                     <div class="col-sm-6 form-group">
-                    <label>Customer ID</label>
-                    <input type="text" placeholder="Enter Customer ID Here.." v-model="Customer_id" class="form-control">
-                   </div>
-                   <div class="col-sm-6 form-group">
-                    <label for="task" class=" control-label">Task</label>
-                    <select id="task" class="form-control" v-model="task">
+                        <label>Customer ID</label>
+                        <input type="text" placeholder="Enter Customer ID Here.." v-model="Customer_id" class="form-control">
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label for="task" class=" control-label">Task</label>
+                        <select id="task" class="form-control" v-model="task">
                         <option value="Acknowledge">Acknowledge Document</option>
                         <option value="Verification">Verify  </option>   
                       </select>
-                </div>
+                    </div>
 
                     <br> <br>
 
@@ -126,25 +126,25 @@
                             <th>Work Gurantor </th>
                             <th>Personal Guarantor</th>
                             <th>Customer Store</th>
-                           
+
                         </tr>
                         <tr>
-                            <td> <button type="button" data-toggle="modal" data-target="#myModal" @click="ModalComfirm(work_gua)" v-bind:class="{ 'btn-danger': check_id == 0 }" :disabled="check_id == 1" class="btn btn-small btn-primary">
+                            <td> <button type="button" data-toggle="modal" data-target="#myModal" @click="ModalComfirm(work_gua)" v-bind:class="{ 'btn-danger': w_guar == 0 }" :disabled="w_guar == 1" class="btn btn-small btn-primary">
                                         <span v-if="w_guar == 1" class="glyphicon glyphicon-ok">Checked</span> 
                                         <span v-if="w_guar == 0" class="glyphicon glyphicon-error">Not Checked</span> 
                                       </button>
                             </td>
-                            <td> <button type="button" data-toggle="modal" data-target="#myModal" @click="ModalComfirm(per_gua)" v-bind:class="{ 'btn-danger': check_pp == 0 }" :disabled="check_pp == 1" class="btn btn-small btn-primary">
+                            <td> <button type="button" data-toggle="modal" data-target="#myModal" @click="ModalComfirm(per_gua)" v-bind:class="{ 'btn-danger': p_guar == 0 }" :disabled="p_guar == 1" class="btn btn-small btn-primary">
                                         <span v-if="p_guar == 1" class="glyphicon glyphicon-ok">Checked</span> 
                                         <span v-if="p_guar == 0" class="glyphicon glyphicon-error">Not Checked</span>
                                       </button>
                             </td>
-                            <td><button type="button" data-toggle="modal" data-target="#myModal" @click="ModalComfirm(store_visited)" v-bind:class="{ 'btn-danger': check_ut == 0 }" :disabled="check_ut == 1" class="btn btn-small btn-primary">
+                            <td><button type="button" data-toggle="modal" data-target="#myModal" @click="ModalComfirm(store_visited)" v-bind:class="{ 'btn-danger': store_v == 0 }" :disabled="store_v == 1" class="btn btn-small btn-primary">
                                         <span  v-if="store_v == 1" class="glyphicon glyphicon-ok">Visited</span>
                                         <span  v-if="store_v == 0" class="glyphicon glyphicon-error"> Not Visited</span>
                                       </button>
                             </td>
-                            
+
                         </tr>
                     </table>
 
