@@ -21,7 +21,17 @@ var app = new Vue({
         utility: 'utilitybill',
         banks: 'bankstatement',
         idchecked: true,
-        selected_doc: null
+        selected_doc: null,
+        task:'',
+        verify:false,
+        w_guar:0,
+        p_guar:0,
+        store_v:0,
+        work_gua: 'workverify',
+        per_gua: 'perverify',
+        store_visited: 'storevisited',
+
+
 
 
 
@@ -223,9 +233,92 @@ var app = new Vue({
                         }
                     });
             }
+            if (doc_type == 'workverify') {
+                axios.post("https://wafcolapi.herokuapp.com/api.php?action=document", {
+                        Customer_id: app.Customer_id,
+                        w_guar: 1
+                       
+
+                    })
+                    .then(function(response) {
+                        console.log(response);
+                        if (response.data.error) {
+                            app.submitted = false;
+                            app.errorMessage = response.data.message;
+                            setTimeout(function() {
+                                app.errorMessage = '';
+                            }, 2000);
+                        } else {
+                            app.submitted = false;
+
+                            app.successMessage = response.data.message;
+                            app.CheckDoc(app.Customer_id);
+                            // app.sendNotification(name, telnumber)
+                            setTimeout(function() {
+                                app.successMessage = '';
+                            }, 2000);
+                            app.selected_doc = null;
+                        }
+                    });
+            }
+
+            if (doc_type == 'perverify') {
+                axios.post("https://wafcolapi.herokuapp.com/api.php?action=document", {
+                        Customer_id: app.Customer_id,
+                        p_guar:1
+                     
+                    })
+                    .then(function(response) {
+                        console.log(response);
+                        if (response.data.error) {
+                            app.submitted = false;
+                            app.errorMessage = response.data.message;
+                            setTimeout(function() {
+                                app.errorMessage = '';
+                            }, 2000);
+                        } else {
+                            app.submitted = false;
+
+                            app.successMessage = response.data.message;
+                            app.CheckDoc(app.Customer_id);
+                            // app.sendNotification(name, telnumber)
+                            setTimeout(function() {
+                                app.successMessage = '';
+                            }, 2000);
+                            app.selected_doc = null;
+                        }
+                    });
+            }
+
+            if (doc_type == 'storevisited') {
+                axios.post("https://wafcolapi.herokuapp.com/api.php?action=document", {
+                        Customer_id: app.Customer_id,
+                        store_v:1
+
+                    })
+                    .then(function(response) {
+                        console.log(response);
+                        if (response.data.error) {
+                            app.submitted = false;
+                            app.errorMessage = response.data.message;
+                            setTimeout(function() {
+                                app.errorMessage = '';
+                            }, 2000);
+                        } else {
+                            app.submitted = false;
+
+                            app.successMessage = response.data.message;
+                            app.CheckDoc(app.Customer_id);
+                            // app.sendNotification(name, telnumber)
+                            setTimeout(function() {
+                                app.successMessage = '';
+                            }, 2000);
+                            app.selected_doc = null;
+                        }
+                    });
+            }
 
         },
-
 
         CheckDoc: function(customer) {
             console.log(customer)
@@ -241,17 +334,23 @@ var app = new Vue({
                         }, 2000);
                     } else {
                         app.idchecked = false;
-                        if (response.data.checklist.length != 0) {
+                        if (response.data.checklist.length != 0 && app.task=='Acknowledge') {
 
                             app.check_ut = response.data.checklist[0].utility;
                             app.check_id = response.data.checklist[0].id_proof;
                             app.check_bs = response.data.checklist[0].banks;
                             app.check_pp = response.data.checklist[0].passport;
                             app.check_gc = response.data.checklist[0].gcheque;
-                            console.log(app.check_bs + app.check_gc + app.check_id + app.check_pp + app.check_ut)
 
-
-                        } else {
+                        }
+                        else if (response.data.checklist.length != 0 && app.task=='Verification'){
+                            app.w_guar = response.data.checklist[0].work_guarantor;
+                            app.p_guar = response.data.checklist[0].personal_gua;
+                            app.store_v = response.data.checklist[0].store_visited;
+                        
+                        }
+                        
+                        else {
                             // app.errorMessage = "Customer ID Doest Exist!";
                             // // app.sendNotification(name, telnumber)
                             // setTimeout(function() {
@@ -286,15 +385,31 @@ var app = new Vue({
                         }, 2000);
 
                     } else {
-                        if (response.data.checklist.length != 0) {
+                        if (response.data.checklist.length != 0 ){
                             app.dataloaded = false;
-                            app.CheckDoc(app.Customer_id);
                             app.CustName = response.data.checklist[0].first_name + " " + response.data.checklist[0].last_name
-
+                        if (app.task =='Acknowledge'){
+                            app.CheckDoc(app.Customer_id);                        
                             app.successMessage = "Click to Acknowlege Customer ";
                             setTimeout(function() {
                                 app.successMessage = '';
                             }, 2000);
+                            
+                        }
+                        else if(app.task =='Verification'){
+                            app.verify = true
+                            app.successMessage = "Verify Customer Guarantors and Store ";
+                            setTimeout(function() {
+                                app.successMessage = '';
+                            }, 2000);
+                        }
+                        else{
+                            app.errorMessage = "Choose a Task ";
+                            setTimeout(function() {
+                                app.errorMessage = '';
+                            }, 2000);
+                        }
+                            
                         } else {
                             app.errorMessage = "Customer ID Doest Exist!";
                             // app.sendNotification(name, telnumber)

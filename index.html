@@ -54,10 +54,21 @@
                     <br>
                 </div>
 
-                <div v-if="access_granted && idchecked" class="" style="padding:30px;;width:90%;margin:0 auto; margin-top:20px;background-color:#EEEEEE">
+                <div v-if="access_granted && idchecked && !verify" class="row" style="padding:30px;width:90%;margin:0 auto; margin-top:20px;background-color:#EEEEEE">
+                    <div class="col-sm-6 form-group">
                     <label>Customer ID</label>
                     <input type="text" placeholder="Enter Customer ID Here.." v-model="Customer_id" class="form-control">
-                    <br>
+                   </div>
+                   <div class="col-sm-6 form-group">
+                    <label for="task" class=" control-label">Task</label>
+                    <select id="task" class="form-control" v-model="task">
+                        <option value="Acknowledge">Acknowledge Document</option>
+                        <option value="Verification">Verify  </option>   
+                      </select>
+                </div>
+
+                    <br> <br>
+
                     <button type="button" @click="CheckId()" class="btn btn-success btn-small" style="display:block; font-size:12px;margin:0 auto;">Approve Customer</button>
 
                 </div>
@@ -109,9 +120,41 @@
                 </div>
 
 
-                <div v-if="!idchecked" class="">
+                <div v-if="verify">
+                    <table class=" table table-bordered list">
+                        <tr>
+                            <th>Work Gurantor </th>
+                            <th>Personal Guarantor</th>
+                            <th>Customer Store</th>
+                           
+                        </tr>
+                        <tr>
+                            <td> <button type="button" data-toggle="modal" data-target="#myModal" @click="ModalComfirm(work_gua)" v-bind:class="{ 'btn-danger': check_id == 0 }" :disabled="check_id == 1" class="btn btn-small btn-primary">
+                                        <span v-if="w_guar == 1" class="glyphicon glyphicon-ok">Checked</span> 
+                                        <span v-if="w_guar == 0" class="glyphicon glyphicon-error">Not Checked</span> 
+                                      </button>
+                            </td>
+                            <td> <button type="button" data-toggle="modal" data-target="#myModal" @click="ModalComfirm(per_gua)" v-bind:class="{ 'btn-danger': check_pp == 0 }" :disabled="check_pp == 1" class="btn btn-small btn-primary">
+                                        <span v-if="p_guar == 1" class="glyphicon glyphicon-ok">Checked</span> 
+                                        <span v-if="p_guar == 0" class="glyphicon glyphicon-error">Not Checked</span>
+                                      </button>
+                            </td>
+                            <td><button type="button" data-toggle="modal" data-target="#myModal" @click="ModalComfirm(store_visited)" v-bind:class="{ 'btn-danger': check_ut == 0 }" :disabled="check_ut == 1" class="btn btn-small btn-primary">
+                                        <span  v-if="store_v == 1" class="glyphicon glyphicon-ok">Visited</span>
+                                        <span  v-if="store_v == 0" class="glyphicon glyphicon-error"> Not Visited</span>
+                                      </button>
+                            </td>
+                            
+                        </tr>
+                    </table>
 
-                    <button type="button" @click="idchecked=true;check_id=0 ;check_gc = 0; check_bs = 0;check_pp = 0 ; check_ut= 0; " class="btn btn-info btn-small" style="display:block; font-size:12px;margin:0 auto;">New Customer</button>
+
+
+                </div>
+
+                <div v-if="!idchecked || verify " class="">
+
+                    <button type="button" @click="idchecked=true;verify=false;check_id=0 ;check_gc = 0;store_v == 0; p_guar == 0; w_guar == 0; check_bs = 0;check_pp = 0 ; check_ut= 0; " class="btn btn-info btn-small" style="display:block; font-size:12px;margin:0 auto;">New Customer</button>
                     <br>
                 </div>
             </div>
