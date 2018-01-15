@@ -408,8 +408,7 @@ var app = new Vue({
                             setTimeout(function() {
                                 app.errorMessage = '';
                             }, 2000);
-                        }
-                            
+                        }                           
                         } else {
                             app.errorMessage = "Customer ID Doest Exist!";
                             // app.sendNotification(name, telnumber)
