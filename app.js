@@ -60,7 +60,7 @@ var app = new Vue({
             }
             var formData = app.toFormData(dat);
             console.log()
-            axios.post("https://wafcolapi.herokuapp.com/api.php?action=aknowledge", formData)
+            axios.post("https://altara-api.herokuapp.com/api.php?action=aknowledge", formData)
                 .then(function(response) {
                     app.dataloaded = false;
                     console.log(response);
@@ -96,7 +96,7 @@ var app = new Vue({
 
         Acknowledge: function(doc_type) {
             if (doc_type == 'proofofid') {
-                axios.post("https://wafcolapi.herokuapp.com/api.php?action=document", {
+                axios.post("https://altara-api.herokuapp.com/api.php?action=document", {
                         Customer_id: app.Customer_id,
                         check_id: 1
 
@@ -123,7 +123,7 @@ var app = new Vue({
                     });
             }
             if (doc_type == 'guarantorcheque') {
-                axios.post("https://wafcolapi.herokuapp.com/api.php?action=document", {
+                axios.post("https://altara-api.herokuapp.com/api.php?action=document", {
                         Customer_id: app.Customer_id,
                         check_gc: 1
                     })
@@ -150,7 +150,7 @@ var app = new Vue({
             }
 
             if (doc_type == 'passportphoto') {
-                axios.post("https://wafcolapi.herokuapp.com/api.php?action=document", {
+                axios.post("https://altara-api.herokuapp.com/api.php?action=document", {
                         Customer_id: app.Customer_id,
                         check_pp: 1
                     })
@@ -177,7 +177,7 @@ var app = new Vue({
             }
 
             if (doc_type == 'utilitybill') {
-                axios.post("https://wafcolapi.herokuapp.com/api.php?action=document", {
+                axios.post("https://altara-api.herokuapp.com/api.php?action=document", {
                         Customer_id: app.Customer_id,
                         check_ut: 1
                     })
@@ -204,7 +204,7 @@ var app = new Vue({
             }
 
             if (doc_type == 'bankstatement') {
-                axios.post("https://wafcolapi.herokuapp.com/api.php?action=document", {
+                axios.post("https://altara-api.herokuapp.com/api.php?action=document", {
                         Customer_id: app.Customer_id,
                         check_bs: 1
 
@@ -231,7 +231,7 @@ var app = new Vue({
                     });
             }
             if (doc_type == 'workverify') {
-                axios.post("https://wafcolapi.herokuapp.com/api.php?action=document", {
+                axios.post("https://altara-api.herokuapp.com/api.php?action=document", {
                         Customer_id: app.Customer_id,
                         w_guar: 1
                     })
@@ -258,7 +258,7 @@ var app = new Vue({
             }
 
             if (doc_type == 'perverify') {
-                axios.post("https://wafcolapi.herokuapp.com/api.php?action=document", {
+                axios.post("https://altara-api.herokuapp.com/api.php?action=document", {
                         Customer_id: app.Customer_id,
                         p_guar:1
                      
@@ -286,7 +286,7 @@ var app = new Vue({
             }
 
             if (doc_type == 'storevisited') {
-                axios.post("https://wafcolapi.herokuapp.com/api.php?action=document", {
+                axios.post("https://altara-api.herokuapp.com/api.php?action=document", {
                         Customer_id: app.Customer_id,
                         store_v:1
 
@@ -317,7 +317,7 @@ var app = new Vue({
 
         CheckDoc: function(customer) {
             console.log(customer)
-            axios.post("https://wafcolapi.herokuapp.com/api.php?action=checkDoc", {
+            axios.post("https://altara-api.herokuapp.com/api.php?action=checkDoc", {
                     Customer_id: customer,
                 })
                 .then(function(response) {
@@ -369,7 +369,7 @@ var app = new Vue({
 
         CheckId: function() {
             app.dataloaded = true;
-            axios.post("https://wafcolapi.herokuapp.com/api.php?action=checkId", {
+            axios.post("https://altara-api.herokuapp.com/api.php?action=checkId", {
                     Customer_id: app.Customer_id
                 })
                 .then(function(response) {
@@ -442,7 +442,7 @@ var app = new Vue({
                 app.comment.Comment = app.comment.Res + ", " + app.comment.Comment;
                 var formData = app.toFormData(app.comment);
 
-                axios.post("https://wafcolapi.herokuapp.com/api.php?action=comment", formData)
+                axios.post("https://altara-api.herokuapp.com/api.php?action=comment", formData)
                     .then(function(response) {
                         console.log(response);
                         app.comment = {};
