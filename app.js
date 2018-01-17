@@ -20,7 +20,7 @@ var app = new Vue({
         passportp: 'passportphoto',
         utility: 'utilitybill',
         banks: 'bankstatement',
-        idchecked: true,
+        idchecked: false,
         selected_doc: null,
         task:'',
         verify:false,
@@ -30,10 +30,7 @@ var app = new Vue({
         work_gua: 'workverify',
         per_gua: 'perverify',
         store_visited: 'storevisited',
-
-
-
-
+        acknow:false
 
     },
 
@@ -237,8 +234,6 @@ var app = new Vue({
                 axios.post("https://wafcolapi.herokuapp.com/api.php?action=document", {
                         Customer_id: app.Customer_id,
                         w_guar: 1
-                       
-
                     })
                     .then(function(response) {
                         console.log(response);
@@ -333,9 +328,10 @@ var app = new Vue({
                             app.errorMessage = '';
                         }, 2000);
                     } else {
-                        app.idchecked = false;
+                        app.idchecked = true;
                         if (response.data.checklist.length != 0 && app.task=='Acknowledge') {
-
+                            app.acknow = true;
+                            app.verify = false;
                             app.check_ut = response.data.checklist[0].utility;
                             app.check_id = response.data.checklist[0].id_proof;
                             app.check_bs = response.data.checklist[0].banks;
@@ -344,6 +340,8 @@ var app = new Vue({
 
                         }
                         else if (response.data.checklist.length != 0 && app.task=='Verification'){
+                            app.verify = true;
+                            app.acknow = false;
                             app.w_guar = response.data.checklist[0].work_guarantor;
                             app.p_guar = response.data.checklist[0].personal_gua;
                             app.store_v = response.data.checklist[0].store_visited;
@@ -389,6 +387,8 @@ var app = new Vue({
                             app.dataloaded = false;
                             app.CustName = response.data.checklist[0].first_name + " " + response.data.checklist[0].last_name
                         if (app.task =='Acknowledge'){
+                            app.acknow = true;
+                            app.verify = false;
                             app.CheckDoc(app.Customer_id);                        
                             app.successMessage = "Click to Acknowlege Customer ";
                             setTimeout(function() {
@@ -397,7 +397,9 @@ var app = new Vue({
                             
                         }
                         else if(app.task =='Verification'){
-                            app.verify = true
+                            app.verify = true;
+                            app.acknow = false;
+                            app.CheckDoc(app.Customer_id); 
                             app.successMessage = "Verify Customer Guarantors and Store ";
                             setTimeout(function() {
                                 app.successMessage = '';
