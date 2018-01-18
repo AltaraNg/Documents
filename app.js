@@ -48,8 +48,6 @@ var app = new Vue({
     },
     methods: {
 
-
-
         GainAccess: function() {
             app.dataloaded = true
                 // console.log("yes");
